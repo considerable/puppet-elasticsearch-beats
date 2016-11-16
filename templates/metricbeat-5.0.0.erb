@@ -1,0 +1,43 @@
+### MANAGEB BY PUPPET
+# /etc/metricbeat/metricbeat.yml
+# per https://www.elastic.co/guide/en/beats/metricbeat/5.0/metricbeat-configuration-options.html
+
+metricbeat.modules:
+- module: system
+  metricsets:
+    - cpu
+    - load
+    - filesystem
+    - memory
+    - network
+    - process
+  enabled: true
+  period: 285
+  processes: ['.*']
+
+<% if @es_version =~ /^2/ %>
+
+# output to  Elasticsearch 2.x
+output.elasticsearch:
+    hosts: ["http://localhost:9200"]
+    template.name: metricbeat
+    template.path: metricbeat.template-es2x.json
+    template.overwrite: true
+
+<% else %>
+
+# output to Elasticsearch 5.0
+output:
+  # per https://www.elastic.co/guide/en/beats/metricbeat/5.0/logstash-output.html
+  #logstash:
+  #  hosts: ["localhost:5044"]
+  # per https://www.elastic.co/guide/en/beats/metricbeat/5.0/configuring-ingest-node.html
+  elasticsearch:
+    hosts: ["http://loalhost:9200"]
+    username: elastic
+    password: changeme
+    template.name: metricbeat
+    template.path: metricbeat.template.json
+    template.overwrite: true
+
+<% end %>

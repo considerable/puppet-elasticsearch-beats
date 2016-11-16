@@ -1,0 +1,45 @@
+### MANAGED BY PUPPET
+# /etc/packetbeat/packetbeat.yml
+# per https://www.elastic.co/guide/en/beats/packetbeat/5.0/packetbeat-configuration.html
+
+packetbeat:
+  interfaces:
+    device: eth0
+  flows:
+    timeout: 30s
+    period: 285s
+  protocols:
+    icmp:
+      enabled: true
+    dns:
+      ports: [53]
+    http:
+      ports: [80, 5601] 
+
+<% if @es_version =~ /^2/ %>
+
+# output to  Elasticsearch 2.x
+output.elasticsearch:
+    hosts: ["http://localhost:9200"]
+    template.name: packetbeat
+    template.path: packetbeat.template-es2x.json
+    template.overwrite: true
+
+<% else %>
+
+# output to Elasticsearch 5.0
+output:
+  # per https://www.elastic.co/guide/en/beats/packetbeat/5.0/logstash-output.html
+  #logstash:
+  #  hosts: ["localhost:5044"]
+  # per https://www.elastic.co/guide/en/beats/packetbeat/5.0/configuring-ingest-node.html
+  elasticsearch:
+    hosts: ["http://loalhost:9200"]
+    username: elastic
+    password: changeme
+    template.name: packetbeat
+    template.path: packetbeat.template.json
+    template.overwrite: true
+
+<% end %>
+

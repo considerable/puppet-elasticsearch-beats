@@ -1,0 +1,15 @@
+{
+  "name": "considerable-beats",
+  "version": "1.0.1",
+  "author": "considerable",
+  "summary": "Installs Elasticserarch Beats",
+  "license": "Apache-2.0",
+  "source": "gitlab",
+  "project_page": "README.md",
+  "issues_url": "m2127299045@gmail.com",
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+  ],
+  "data_provider": null
+}
+

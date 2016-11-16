@@ -1,0 +1,41 @@
+### MANAGED BY PUPPET
+# /etc/filebeat/filebeat.yml
+# per https://www.elastic.co/guide/en/beats/filebeat/5.0/configuration-filebeat-options.html
+
+filebeat:
+  prospectors:
+    -
+      paths:
+        - /var/log/messages
+      #  - /var/log/secure
+      #  - /var/log/*.log
+      input_type: log
+      document_type: syslog
+  registry_file: /var/lib/filebeat/registry
+
+<% if @es_version =~ /^2/ %>
+
+# output to  Elasticsearch 2.x
+output.elasticsearch:
+    hosts: ["http://localhost:9200"]
+    template.name: filebeat
+    template.path: filebeat.template-es2x.json
+    template.overwrite: true
+
+<% else %>
+
+# output to Elasticsearch 5.0
+output:
+  # per https://www.elastic.co/guide/en/beats/filebeat/5.0/logstash-output.html
+  #logstash:
+  #  hosts: ["localhost:5044"]
+  # per https://www.elastic.co/guide/en/beats/filebeat/5.0/configuring-ingest-node.html
+  elasticsearch:
+    hosts: ["http://loalhost:9200"]
+    username: elastic
+    password: changeme
+    template.name: filebeat
+    template.path: filebeat.template.json
+    template.overwrite: true
+
+<% end %>
