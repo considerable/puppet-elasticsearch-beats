@@ -1,7 +1,7 @@
 # beats/manifests/init.pp
 #
 class beats () {
-  $beats = {
+  $my_beats = {
     'metricbeat' => {
       file_prefix => 'metricbeat-5.0.0',
       pk_version  => '5.0.0-1',
@@ -18,6 +18,6 @@ class beats () {
     }
   }
 
-  create_resources('skywalk::abeat', $beats)
+  create_resources('beats::abeat', $my_beats)
 
 }
