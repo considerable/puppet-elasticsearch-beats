@@ -11,8 +11,9 @@ define beats::abeat (
   # per https://docs.puppet.com/puppet/latest/reference/lang_defined_types.html
   $pk_name       = $title,
   $file_prefix   = undef,
-  $pk_version    = undef,
+  $pk_version    = 'installed',
   $sv_ensure     = 'running',
+  $sv_enable     = true,
   $downloads_url = 'https://artifacts.elastic.co/downloads/beats/',
 
 ) {
@@ -73,7 +74,7 @@ define beats::abeat (
 
   service { $pk_name:
     ensure => $sv_ensure,
-    enable => true,
+    enable => $sv_enable,
   }
 
 }
